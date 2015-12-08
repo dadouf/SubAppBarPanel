@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SubAppBarPanel">
+        <attr name="panel_expanded" format="boolean" />
+        <attr name="panel_offset" format="dimension" />
+        <attr name="panel_slidingQuantity" format="fraction" />
+    </declare-styleable>
+</resources>
