@@ -1,8 +1,8 @@
 # SubAppBarPanel
 
-Panel that slides down the app bar, to recreate an effect similar to the quick settings panel in Android Lollipop and above.
+**A panel that slides down from below the app bar**, to recreate an effect similar to the quick settings panel in Android Lollipop and above.
 
-This repo contains just the bare essential for now, but I have plans to make it into a proper library module distributed via a Maven repo.
+![](https://github.com/dadouf/SubAppBarPanel/blob/master/art/demo.gif)
 
 ## Usage
 
