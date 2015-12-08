@@ -52,7 +52,7 @@ The important bits:
 
 * The `AppBarLayout`, the `SubAppBarPanel` and main content layout all need to be children of the same `CoordinatorLayout`.
 * You must set the behavior `app:layout_behavior="com.davidferrand.subappbarpanel.SubAppBarPanel$ScrollingViewBehavior"` on the main content layout.
-* Expand and collapse the panel programmatically by calling `setExpanded(boolean expanded, boolean animate)`.
+* Expand and collapse the panel programmatically by calling `setExpanded(boolean expanded, boolean animate)` or `toggle(boolean animate)`.
 
 For a complete example, check the sample.
 
@@ -65,9 +65,10 @@ For a complete example, check the sample.
 
 ## TODOs
 
-* Make it appear correctly in edit mode in Android Studio
-* Instead of a slidingQuantity, provide a dimension for overlap when expanded
-* Increase the interaction with the AppBarLayout: dragging actions, etc.
+* Make it appear correctly in edit mode in Android Studio.
+* Instead of a `slidingQuantity`, provide a dimension for overlap when expanded.
+* Increase the interaction with the `AppBarLayout`: dragging actions, etc.
+* It should be possible to improve the performance of the `SubAppBarPanel$ScrollingViewBehavior`.
 
 ## Installation
 
