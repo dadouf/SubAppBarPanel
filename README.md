@@ -76,4 +76,5 @@ Coming soon...
 
 ## License
 
-Coming soon...
+The MIT License (MIT). Copyright (c) 2015 David Ferrand.
+See [LICENSE.txt](https://github.com/dadouf/SubAppBarPanel/blob/master/LICENSE.txt).
