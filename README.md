@@ -72,7 +72,22 @@ For a complete example, check the sample.
 
 ## Installation
 
-Coming soon...
+This project relies on [JitPack.io](https://jitpack.io/).
+
+To add the library to your project:
+
+1. Add the JitPack repository to your build file:
+
+	repositories {
+			...
+			maven { url "https://jitpack.io" }
+	}
+
+2. Add the dependency
+
+	dependencies {
+	    compile 'com.github.dadouf:SubAppBarPanel:v0.1.0'
+	}
 
 ## License
 
