@@ -54,12 +54,20 @@ The important bits:
 * You must set the behavior `app:layout_behavior="com.davidferrand.subappbarpanel.SubAppBarPanel$ScrollingViewBehavior"` on the main content layout.
 * Expand and collapse the panel programmatically by calling `setExpanded(boolean expanded, boolean animate)`.
 
+For a complete example, check the sample.
+
 ## Customisation
 
 * There are three layout parameters to play with:
     * panel_expanded
     * panel_offset
     * panel_slidingQuantity
+
+## TODOs
+
+* Make it appear correctly in edit mode in Android Studio
+* Instead of a slidingQuantity, provide a dimension for overlap when expanded
+* Increase the interaction with the AppBarLayout: dragging actions, etc.
 
 ## Installation
 
