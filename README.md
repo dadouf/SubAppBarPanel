@@ -78,16 +78,16 @@ To add the library to your project:
 
 1. Add the JitPack repository to your build file:
 
-	repositories {
-			...
-			maven { url "https://jitpack.io" }
-	}
+    	repositories {
+    		...
+    		maven { url "https://jitpack.io" }
+    	}
 
 2. Add the dependency
 
-	dependencies {
-	    compile 'com.github.dadouf:SubAppBarPanel:v0.1.0'
-	}
+    	dependencies {
+    	    compile 'com.github.dadouf:SubAppBarPanel:v0.1.0'
+    	}
 
 ## License
 
