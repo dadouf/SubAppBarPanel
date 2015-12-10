@@ -3,6 +3,7 @@ package com.davidferrand.subappbarpanelsample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         panel.setOnPanelMovementListener(new SubAppBarPanel.OnPanelMovementListener() {
             @Override
             public void onPanelMovementStarted(boolean expanding) {
+                Log.v("Panel movement", "The panel is " +
+                        (expanding ? "expanding" : "collapsing"));
+
                 expandIndicator.setImageResource(expanding ?
                         R.drawable.ic_expand_less_white_24dp :
                         R.drawable.ic_expand_more_white_24dp);
@@ -42,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPanelMovementEnded(boolean expanded) {
-
+                Log.v("Panel movement", "The panel is completely " +
+                        (expanded ? "expanded" : "collapsed"));
             }
         });
     }
