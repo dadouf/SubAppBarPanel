@@ -24,6 +24,7 @@
 
 package com.davidferrand.subappbarpanel;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.design.widget.AppBarLayout;
@@ -32,6 +33,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
+/**
+ * Panel that slides down the app bar, to recreate an effect similar to the quick settings panel in
+ * Android Lollipop and above.
+ */
 @CoordinatorLayout.DefaultBehavior(SubAppBarPanel.Behavior.class)
 public class SubAppBarPanel extends FrameLayout {
     private final static boolean DEFAULT_EXPANDED = false;
@@ -45,6 +50,8 @@ public class SubAppBarPanel extends FrameLayout {
      * This is set in accordance to the position of the {@link AppBarLayout}.
      */
     private float baseTranslationY;
+
+    private OnPanelMovementListener listener;
 
     public SubAppBarPanel(Context context) {
         this(context, null);
@@ -73,6 +80,13 @@ public class SubAppBarPanel extends FrameLayout {
         return offset;
     }
 
+    /**
+     * Set the state of the panel.
+     *
+     * @param shouldExpand If true, expand the panel. If false, collapse it.
+     * @param animate      If true, there's a smooth transition to the new state.
+     *                     If false, the new state is instantly set.
+     */
     public void setExpanded(final boolean shouldExpand, boolean animate) {
         float translationOffset;
         if (shouldExpand) {
@@ -82,28 +96,91 @@ public class SubAppBarPanel extends FrameLayout {
         }
 
         if (animate) {
-            animate().translationY(baseTranslationY + translationOffset);
+            animate().translationY(baseTranslationY + translationOffset).setListener(new Animator.AnimatorListener() {
+                boolean hasBeenCanceled = false;
+
+                @Override
+                public void onAnimationStart(Animator animator) {
+                    if (listener != null) {
+                        listener.onPanelMovementStarted(shouldExpand);
+                    }
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    if (!hasBeenCanceled && listener != null) {
+                        listener.onPanelMovementEnded(shouldExpand);
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+                    hasBeenCanceled = true;
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
+
+                }
+            });
         } else {
             setTranslationY(baseTranslationY + translationOffset);
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    if (listener != null) {
+                        listener.onPanelMovementStarted(shouldExpand);
+                        listener.onPanelMovementEnded(shouldExpand);
+                    }
+                }
+            });
         }
 
         expandedOrExpanding = shouldExpand;
     }
 
+    /**
+     * Retrieve the state of the panel.
+     *
+     * @return True if the panel is expanded or currently expanding.
+     */
     public boolean isExpanded() {
         return expandedOrExpanding;
     }
 
-    public void setExpanded(boolean expanded) {
-        setExpanded(expanded, true);
+    /**
+     * Like {@link #setExpanded(boolean, boolean)} with animate = true.
+     *
+     * @param shouldExpand If true, expand the panel. If false, collapse it.
+     */
+    public void setExpanded(boolean shouldExpand) {
+        setExpanded(shouldExpand, true);
     }
 
+    /**
+     * Like {@link #toggle(boolean)} with animate = true.
+     */
     public void toggle() {
         toggle(true);
     }
 
+    /**
+     * Toggle the state of the panel.
+     *
+     * @param animate If true, the panel will be smoothly expanded or collapsed.
+     *                If false, the new state is instantly set.
+     */
     public void toggle(boolean animate) {
         setExpanded(!expandedOrExpanding, animate);
+    }
+
+    /**
+     * Define the listener for expanding/collapsing/expanded/collapsed events.
+     *
+     * @param listener A listener for panel movements.
+     */
+    public void setOnPanelMovementListener(OnPanelMovementListener listener) {
+        this.listener = listener;
     }
 
     private void setBaseTranslationY(float baseTranslationY) {
@@ -114,6 +191,28 @@ public class SubAppBarPanel extends FrameLayout {
 //    public SubAppBarPanel(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 //        super(context, attrs, defStyleAttr, defStyleRes);
 //    }
+
+    /**
+     * Listener for expanding/collapsing/expanded/collapsed events.
+     */
+    public interface OnPanelMovementListener {
+        /**
+         * Called when the panel has started to expand or collapse.
+         * For consistency, this is called even when the panel is not animated: in that case
+         * {@link #onPanelMovementEnded(boolean)} will be called right after.
+         *
+         * @param expanding True if the movement started is an expanding movement,
+         *                  false if it's a collapsing movement.
+         */
+        void onPanelMovementStarted(boolean expanding);
+
+        /**
+         * Called when the panel has reached a resting state (expanded or collapsed).
+         *
+         * @param expanded True if the panel is expanded, false if it's collapsed.
+         */
+        void onPanelMovementEnded(boolean expanded);
+    }
 
     /**
      * Behavior implemented by the {@link SubAppBarPanel}: it will stay below the
