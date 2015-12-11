@@ -30,7 +30,6 @@ import android.content.res.TypedArray;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -96,7 +95,8 @@ public class SubAppBarPanel extends FrameLayout {
                 - getHeight()
                 + offsetCollapsed;
 
-        targetTranslationYExpanded = getHeight()
+        targetTranslationYExpanded = appBarLayout.getY() // In normal conditions: 0.0
+                + appBarLayout.getHeight() // In normal conditions: ?actionBarSize
                 - offsetExpanded;
 
 //        Log.v("initPanelOffsets", "appBarLayout.getY() = " + appBarLayout.getY()
@@ -116,15 +116,15 @@ public class SubAppBarPanel extends FrameLayout {
      *                     If false, the new state is instantly set.
      */
     public void setExpanded(final boolean shouldExpand, boolean animate) {
-        float translationOffset;
+        float targetTranslation;
         if (shouldExpand) {
-            translationOffset = targetTranslationYExpanded;
+            targetTranslation = targetTranslationYExpanded;
         } else {
-            translationOffset = 0;
+            targetTranslation = targetTranslationYCollapsed;
         }
 
         if (animate) {
-            animate().translationY(targetTranslationYCollapsed + translationOffset).setListener(new Animator.AnimatorListener() {
+            animate().translationY(targetTranslation).setListener(new Animator.AnimatorListener() {
                 boolean hasBeenCanceled = false;
 
                 @Override
@@ -152,7 +152,7 @@ public class SubAppBarPanel extends FrameLayout {
                 }
             });
         } else {
-            setTranslationY(targetTranslationYCollapsed + translationOffset);
+            setTranslationY(targetTranslation);
             post(new Runnable() {
                 @Override
                 public void run() {
