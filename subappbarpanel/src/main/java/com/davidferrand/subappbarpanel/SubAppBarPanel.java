@@ -30,6 +30,7 @@ import android.content.res.TypedArray;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -95,9 +96,16 @@ public class SubAppBarPanel extends FrameLayout {
                 - getHeight()
                 + offsetCollapsed;
 
-        targetTranslationYExpanded = appBarLayout.getY() // In normal conditions: 0.0
-                + appBarLayout.getHeight() // In normal conditions: ?actionBarSize
+        targetTranslationYExpanded = getHeight()
                 - offsetExpanded;
+
+//        Log.v("initPanelOffsets", "appBarLayout.getY() = " + appBarLayout.getY()
+//                + "\nappBarLayout.getHeight() = " + appBarLayout.getHeight()
+//                + "\ngetHeight() = " + getHeight()
+//                + "\noffsetCollapsed = " + offsetCollapsed
+//                + "\noffsetExpanded = " + offsetExpanded
+//                + "\ntargetTranslationYCollapsed=" + targetTranslationYCollapsed
+//                + "\ntargetTranslationYExpanded=" + targetTranslationYExpanded);
     }
 
     /**
