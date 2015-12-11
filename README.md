@@ -8,45 +8,47 @@
 
 Basic setup:
 
-    <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+```xml
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        
-        <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            
-            <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:clickable="true"
-                android:foreground="?selectableItemBackground" />
-                
-        </android.support.design.widget.AppBarLayout>
-        
-        <com.davidferrand.subappbarpanel.SubAppBarPanel
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:panel_expanded="false"
-            app:panel_offsetCollapsed="0dp"
-            app:panel_offsetCollapsed="0dp">
-            
-            <!-- Content of the sliding panel -->
-            
-        </com.davidferrand.subappbarpanel.SubAppBarPanel>
-    
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="com.davidferrand.subappbarpanel.SubAppBarPanel$ScrollingViewBehavior">
-            
-            <!-- Main content -->
-            
-        </FrameLayout>
-            
-    </android.support.design.widget.CoordinatorLayout>
+            android:layout_height="?attr/actionBarSize"
+            android:clickable="true"
+            android:foreground="?selectableItemBackground" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <com.davidferrand.subappbarpanel.SubAppBarPanel
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:panel_expanded="false"
+        app:panel_offsetCollapsed="0dp"
+        app:panel_offsetCollapsed="0dp">
+
+        <!-- Content of the sliding panel -->
+
+    </com.davidferrand.subappbarpanel.SubAppBarPanel>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.davidferrand.subappbarpanel.SubAppBarPanel$ScrollingViewBehavior">
+
+        <!-- Main content -->
+
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+```
 
 The important bits:
 
@@ -80,17 +82,19 @@ This project relies on [JitPack.io](https://jitpack.io/).
 To add the library to your project:
 
 1. Add the JitPack repository to your build file:
-
-    	repositories {
-    		...
-    		maven { url "https://jitpack.io" }
-    	}
+    ```gradle
+    repositories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+    ```
 
 2. Add the dependency
-
-    	dependencies {
-    	    compile 'com.github.dadouf:SubAppBarPanel:v0.3.0'
-    	}
+    ```gradle
+    dependencies {
+        compile 'com.github.dadouf:SubAppBarPanel:v0.3.0'
+    }
+    ```
 
 ## License
 
