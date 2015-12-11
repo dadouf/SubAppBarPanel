@@ -30,8 +30,8 @@ Basic setup:
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:panel_expanded="false"
-            app:panel_offset="10dp"
-            app:panel_slidingQuantity="85%">
+            app:panel_offsetCollapsed="0dp"
+            app:panel_offsetCollapsed="0dp">
             
             <!-- Content of the sliding panel -->
             
@@ -56,17 +56,20 @@ The important bits:
 
 For a complete example, check the sample.
 
-## Customisation
+## Advanced setup
 
 * There are three layout parameters to play with:
-    * panel_expanded
-    * panel_offset
-    * panel_slidingQuantity
+    * `panel_expanded` (default false)
+    * `panel_offsetCollapsed` (default 0dp): specifies how much the panel is apparent below the app bar in collapsed position
+    * `panel_offsetExpanded` (default 0dp): specifies how much the panel stays covered by the app bar in expanded position
+
+* You can set a listener with `setOnPanelMovementListener()` to get callbacks:
+    * `onPanelMovementStarted(boolean expanding)` when the panel has started to expand or collapse
+    * `onPanelMovementEnded(boolean expanded)` when the panel has reached a resting state (expanded or collapsed)
 
 ## TODOs
 
 * Make it appear correctly in edit mode in Android Studio.
-* Instead of a `slidingQuantity`, provide a dimension for overlap when expanded.
 * Increase the interaction with the `AppBarLayout`: dragging actions, etc.
 * It should be possible to improve the performance of the `SubAppBarPanel$ScrollingViewBehavior`.
 
@@ -86,7 +89,7 @@ To add the library to your project:
 2. Add the dependency
 
     	dependencies {
-    	    compile 'com.github.dadouf:SubAppBarPanel:v0.1.0'
+    	    compile 'com.github.dadouf:SubAppBarPanel:v0.3.0'
     	}
 
 ## License
