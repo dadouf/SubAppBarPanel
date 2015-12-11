@@ -40,16 +40,29 @@ import android.widget.FrameLayout;
 @CoordinatorLayout.DefaultBehavior(SubAppBarPanel.Behavior.class)
 public class SubAppBarPanel extends FrameLayout {
     private final static boolean DEFAULT_EXPANDED = false;
-    private final static int DEFAULT_OFFSET = 20;
-    private final static float DEFAULT_SLIDING_QUANTITY = 1f;
-    private final int offset; // TODO provide getters and setters for offset
-    private final float slidingQuantity; // TODO provide getters and setters for slidingQuantity
+    private final static int DEFAULT_OFFSET_COLLAPSED = 0;
+    private final static int DEFAULT_OFFSET_EXPANDED = 0;
+    /**
+     * Specifies how much the panel is apparent below the app bar in collapsed position.
+     * TODO provide getter and setter
+     */
+    private final int offsetCollapsed;
+    /**
+     * Specifies how much the panel stays covered by the app bar in expanded position.
+     * TODO provide getter and setter
+     */
+    private final int offsetExpanded;
     private boolean expandedOrExpanding;
     /**
      * Corresponds to the translationY value for the "collapsed" appearance.
      * This is set in accordance to the position of the {@link AppBarLayout}.
      */
-    private float baseTranslationY;
+    private float targetTranslationYCollapsed;
+    /**
+     * Corresponds to the translationY value for the "expanded" appearance.
+     * This is set in accordance to the position of the {@link AppBarLayout}.
+     */
+    private float targetTranslationYExpanded;
 
     private OnPanelMovementListener listener;
 
@@ -69,15 +82,22 @@ public class SubAppBarPanel extends FrameLayout {
 
         try {
             expandedOrExpanding = a.getBoolean(R.styleable.SubAppBarPanel_panel_expanded, DEFAULT_EXPANDED);
-            offset = a.getDimensionPixelOffset(R.styleable.SubAppBarPanel_panel_offset, DEFAULT_OFFSET);
-            slidingQuantity = a.getFraction(R.styleable.SubAppBarPanel_panel_slidingQuantity, 1, 1, DEFAULT_SLIDING_QUANTITY);
+            offsetCollapsed = a.getDimensionPixelOffset(R.styleable.SubAppBarPanel_panel_offsetCollapsed, DEFAULT_OFFSET_COLLAPSED);
+            offsetExpanded = a.getDimensionPixelOffset(R.styleable.SubAppBarPanel_panel_offsetExpanded, DEFAULT_OFFSET_EXPANDED);
         } finally {
             a.recycle();
         }
     }
 
-    private int getOffset() {
-        return offset;
+    private void initPanelOffsets(AppBarLayout appBarLayout) {
+        targetTranslationYCollapsed = appBarLayout.getY() // In normal conditions: 0.0
+                + appBarLayout.getHeight() // In normal conditions: ?actionBarSize
+                - getHeight()
+                + offsetCollapsed;
+
+        targetTranslationYExpanded = appBarLayout.getY() // In normal conditions: 0.0
+                + appBarLayout.getHeight() // In normal conditions: ?actionBarSize
+                - offsetExpanded;
     }
 
     /**
@@ -90,13 +110,13 @@ public class SubAppBarPanel extends FrameLayout {
     public void setExpanded(final boolean shouldExpand, boolean animate) {
         float translationOffset;
         if (shouldExpand) {
-            translationOffset = slidingQuantity * getHeight();
+            translationOffset = targetTranslationYExpanded;
         } else {
             translationOffset = 0;
         }
 
         if (animate) {
-            animate().translationY(baseTranslationY + translationOffset).setListener(new Animator.AnimatorListener() {
+            animate().translationY(targetTranslationYCollapsed + translationOffset).setListener(new Animator.AnimatorListener() {
                 boolean hasBeenCanceled = false;
 
                 @Override
@@ -124,7 +144,7 @@ public class SubAppBarPanel extends FrameLayout {
                 }
             });
         } else {
-            setTranslationY(baseTranslationY + translationOffset);
+            setTranslationY(targetTranslationYCollapsed + translationOffset);
             post(new Runnable() {
                 @Override
                 public void run() {
@@ -183,10 +203,6 @@ public class SubAppBarPanel extends FrameLayout {
         this.listener = listener;
     }
 
-    private void setBaseTranslationY(float baseTranslationY) {
-        this.baseTranslationY = baseTranslationY;
-    }
-
     // TODO cross-version
 //    public SubAppBarPanel(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 //        super(context, attrs, defStyleAttr, defStyleRes);
@@ -233,14 +249,9 @@ public class SubAppBarPanel extends FrameLayout {
 
         @Override
         public boolean onDependentViewChanged(CoordinatorLayout parent, SubAppBarPanel child, View dependency) {
-            // Set the base for all successive calculations
-            child.setBaseTranslationY(
-                    dependency.getY() // In normal conditions: 0.0
-                            + dependency.getHeight() // In normal conditions: ?actionBarSize
-                            + child.getOffset()
-                            - child.getHeight());
+            child.initPanelOffsets((AppBarLayout) dependency);
 
-            // Init the position of the panel
+            // Init the position of the panel. TODO not do it here, buggy if app bar moves
             child.setExpanded(child.isExpanded(), false);
 
             return true;
